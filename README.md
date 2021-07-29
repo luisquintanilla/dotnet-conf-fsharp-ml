@@ -18,6 +18,8 @@ Train and deploy a machine learning model to predict the score given to a restau
 
 ## Project Assets
 
+Slides are in the [dotnetconf-fsharp-machine-learning.pdf](./dotnetconf-fsharp-machine-learning.pdf) file.
+
 - **data** - Location for original dataset.
 - **webapi** - F# Saturn Web API to host *InspectionModel.zip* regression model.
   - **Domain.fs** - Contains the schema of the model input and output.
