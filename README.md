@@ -41,7 +41,7 @@ The dataset represents the NYC restaurant inspection results. For more informati
 1. Start Apache Spark in debug mode. **Note that this is a script for the Windows CMD prompt. You might need to modify the `^` characters a bit to work on PowerShell `` ` `` or Linux `\`.**
 
     ```console
-    submit.cmd
+    spark-debug.cmd
     ```
 
 2. Use .NET CLI and F# Interactive to run *data.fsx*.
