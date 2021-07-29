@@ -111,6 +111,8 @@ The following commands assume you have the Azure CLI installed & are logged in t
 dotnet fsi Deploy.fsx
 ```
 
+If your deployment is successful, you should see your application in the Azure Portal.
+
 ## Resources
 
 - [F# Documentation](http://docs.microsoft.com/dotnet/fsharp)
@@ -118,3 +120,5 @@ dotnet fsi Deploy.fsx
 - [ML.NET Documentation](http://docs.microsoft.com/dotnet/machine-learning)
 - [ML.NET F# Samples](https://github.com/dotnet/machinelearning-samples/tree/main/samples/fsharp)
 - [.NET Interactive](https://github.com/dotnet/interactive)
+- [F# Learn Path](https://docs.microsoft.com/en-us/learn/paths/fsharp-first-steps/)
+- [F# Beginner Video Series](https://aka.ms/BeginnersSeriesFSharp)
