@@ -54,15 +54,15 @@ The dataset represents the NYC restaurant inspection results. For more informati
 
     1. Windows CMD Prompt
 
-    ```console
-    spark-debug.cmd
-    ```
+        ```console
+        spark-debug.cmd
+        ```
 
     1. Unix (Linux/Mac)
 
-    ```bash
-    spark-debug.sh        
-    ```
+        ```bash
+        spark-debug.sh        
+        ```
 
 **Make sure to keep the window you ran this script on open until *data-prep-modeling.fsx* is done running done preprocessing your data**.
 
