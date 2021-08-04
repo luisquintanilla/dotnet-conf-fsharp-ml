@@ -2,7 +2,12 @@
 
 // Install & reference Microsoft.Spark package
 
+open System.Threading
+
 #r "nuget:Microsoft.Spark"
+
+printfn "Loading Microsoft Spark package"
+Thread.Sleep(15000)
 
 open Microsoft.Spark.Sql
 
@@ -142,6 +147,7 @@ prepData.Write().Mode(SaveMode.Overwrite).Csv("processed-data")
 #r "nuget:Microsoft.ML"
 #r "nuget:Microsoft.ML.AutoML"
 
+open System.IO
 open Microsoft.ML
 open Microsoft.ML.Data
 open Microsoft.ML.AutoML
@@ -171,7 +177,7 @@ let mlContext = MLContext()
 
 // Load data into IDataView
 
-let dataPath = Path.Join(__SOURCE_DIRECTORY__,"processed-data\*.csv")
+let dataPath = Path.Join(__SOURCE_DIRECTORY__,"processed-data","*.csv")
 let data = mlContext.Data.LoadFromTextFile<ModelInput>(dataPath,separatorChar=',', allowQuoting=true, hasHeader=false)
 
 // Split into training and test sets

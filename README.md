@@ -34,19 +34,39 @@ Slides are in the [dotnetconf-fsharp-machine-learning.pdf](./dotnetconf-fsharp-m
 
 The dataset represents the NYC restaurant inspection results. For more information, see [DOHMH New York City Restaurant Inspection Results](https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j).
 
+### Get the data
+
+1. Navigate to the [DOHMH New York City Restaurant Inspection Results](https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j) page.
+1. Select **Export > CSV**.
+
+    ![NYC data portal restaurant inspections dataset page](https://user-images.githubusercontent.com/46974588/128229956-adcffd6f-30f8-49ad-a0f3-eeec4bf9a073.png)
+
+1. A csv file is downloaded to your PC.
+1. Copy it to the *data* directory and rename it *nyc-restaurant-inspections.csv*.
+
 ## Run application
 
 ### Prepare data & train model
 
 .NET for Apache Spark is used to prepare the raw data for training. To prep data, start Apache Spark.
 
-1. Start Apache Spark in debug mode. **Note that this is a script for the Windows CMD prompt. You might need to modify the `^` characters a bit to work on PowerShell `` ` `` or Linux `\`.**
+1. Start Apache Spark in debug mode. **This sample uses Apache Spark 2.4. Depending on your Spark version you might have to reference a different jar from the *jars* directory in your *spark-debug* script.**
+
+    1. Windows CMD Prompt
 
     ```console
     spark-debug.cmd
     ```
 
-2. Use .NET CLI and F# Interactive to run *data.fsx*.
+    1. Unix (Linux/Mac)
+
+    ```bash
+    spark-debug.sh        
+    ```
+
+**Make sure to keep the window you ran this script on open until *data-prep-modeling.fsx* is done running done preprocessing your data**.
+
+2. Use .NET CLI and F# Interactive to run *data-prep-modeling.fsx*.
 
     ```dotnetcli
     dotnet fsi data-prep-modeling.fsx
