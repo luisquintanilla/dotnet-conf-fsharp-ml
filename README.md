@@ -46,7 +46,37 @@ The dataset represents the NYC restaurant inspection results. For more informati
 
 ## Run application
 
-### Prepare data & train model
+### Cheat sheet
+
+Assuming that you've "installed"
+
+- Maven
+- Apache Spark
+- Microsoft Spark Worker
+
+in `~/bin`
+
+then here are some commands which can be helpful assuming that you've placed *Maven, Spark and Microsoft.Spark.Worker* in `~/bin`:
+
+```shell
+export M2_HOME=~/bin/maven/current
+export PATH=${M2_HOME}/bin:${PATH}
+export SPARK_HOME=~/bin/spark-3.0.1-bin-hadoop2.7 # USE THE CORRECT PATH WHERE YOU HAVE SPARK
+export PATH="$SPARK_HOME/bin:$PATH"
+export DOTNET_WORKER_DIR=~/bin/Microsoft.Spark.Worker-2.0.0
+```
+
+Then, depending upon the shell that you have, run:
+
+```shell
+source ~/.zshrc
+
+# OR
+
+source ~/.bashrc
+```
+
+### Prepare data
 
 .NET for Apache Spark is used to prepare the raw data for training. To prep data, start Apache Spark.
 
@@ -61,7 +91,7 @@ The dataset represents the NYC restaurant inspection results. For more informati
     1. Unix (Linux/Mac)
 
         ```bash
-        spark-debug.sh        
+        ./spark-debug.sh
         ```
 
 **Make sure to keep the window you ran this script on open until *data-prep-modeling.fsx* is done running done preprocessing your data**.
@@ -74,9 +104,17 @@ The dataset represents the NYC restaurant inspection results. For more informati
 
 This will prepare the data, create an output directory *processed-data* for the results, and save the results to *.csv* files.
 
+3.  **Remember to stop Apache Spark once *data-prep-modeling.fsx* is done preparing the data. `Ctrl + C`**
+
+### Train the model
+
 Automated ML (AutoML) in ML.NET is used to train a regression model to predict the inspection score.  This script trains your model and saved the serialized version of it to a file called *InspectionModel.zip*.
 
-**Remember to stop Apache Spark once *data-prep-modeling.fsx* is done preparing the data. `Ctrl + C`**
+1. Run the script `data-prep-training.fsx` which might take a while:
+
+    ```dotnetcli
+    dotnet fsi data-prep-training.fsx
+    ```
 
 ## Run Web API
 
