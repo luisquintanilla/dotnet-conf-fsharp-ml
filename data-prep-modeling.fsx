@@ -13,7 +13,7 @@ open Microsoft.Spark.Sql
 
 // Initialize Spark Session
 
-let sparkSession = 
+let sparkSession =
     SparkSession
         .Builder()
         .AppName("on-dotnet-fsharp")
@@ -21,7 +21,7 @@ let sparkSession =
 
 // Load data into Spark DataFrame
 
-let df = 
+let df =
     sparkSession
         .Read()
         .Option("header","true")
@@ -32,7 +32,7 @@ df.PrintSchema()
 
 // Group data by borough
 
-let boroughs = 
+let boroughs =
     df.GroupBy([|Functions.Col("BORO")|]).Count()
 
 boroughs.Show()
@@ -52,7 +52,7 @@ open Plotly.NET
 
 // Plot borough information
 
-let boroughs,counts = 
+let boroughs,counts =
     cleanBoroughs
       .Select("BORO","count")
       .OrderBy(Functions.Col("count").Desc())
@@ -66,7 +66,7 @@ boroughColumn
 
 // Get coordinate information
 
-let coordinates = 
+let coordinates =
   df
     .Select(
       Functions.Col("CAMIS"),Functions.Col("Latitude"),Functions.Col("Longitude"))
@@ -80,12 +80,12 @@ let nonZeroCoordinates = coordinates.Where("Latitude != 0.0 OR Longitude != 0.0"
 
 // Plot coordinates
 
-let labels, lat, lon = 
+let labels, lat, lon =
     nonZeroCoordinates.Select("CAMIS","Latitude","Longitude").Collect()
     |> Seq.map(fun row -> string row.[0], string row.[1] |> float, string row.[2] |> float)
     |> Seq.unzip3
 
-let pointMapbox = 
+let pointMapbox =
     Chart.PointMapbox(
         lon,lat,
         Labels = labels,
@@ -114,10 +114,10 @@ In this query, the dataset is processed to extract the following columns:
 - CRITICAL FLAG
 - SCORE
 
-SCORE is the column to predict when we train our machine learning model. The rest of the columns will be the features or inputs for our model.    
+SCORE is the column to predict when we train our machine learning model. The rest of the columns will be the features or inputs for our model.
 *)
 
-let prepData = 
+let prepData =
     df
       .Select("CAMIS","BORO","INSPECTION DATE","INSPECTION TYPE","VIOLATION CODE","CRITICAL FLAG","SCORE")
       .Where(Functions.Col("INSPECTION DATE").NotEqual("01/01/1900"))
@@ -139,82 +139,4 @@ let prepData =
 
 prepData.Write().Mode(SaveMode.Overwrite).Csv("processed-data")
 
-(*TRAIN THE MODEL*)
-// In this section, we'll take the data that was processed using .NET for Apache Spark and use it for training
-
-// Install and reference ML.NET & AutoML packages
-
-#r "nuget:Microsoft.ML"
-#r "nuget:Microsoft.ML.AutoML"
-
-open System.IO
-open Microsoft.ML
-open Microsoft.ML.Data
-open Microsoft.ML.AutoML
-
-// Define model input and output schema
-
-[<CLIMutable>]
-type ModelInput = {
-    [<LoadColumn(0)>] Camis: string
-    [<LoadColumn(1)>] Boro: string
-    [<LoadColumn(2)>] InspectionType: string
-    [<LoadColumn(3)>] InspectionScore: float32
-    [<LoadColumn(4)>] Violations: string
-    [<LoadColumn(5)>] CriticalViolations: float32
-    [<LoadColumn(6)>] TotalViolations: float32
-}
-
-[<CLIMutable>]
-type ModelOutput = {
-    InspectionScore: float32
-    Score: float32
-}
-
-// Initialize MLContext
-
-let mlContext = MLContext()
-
-// Load data into IDataView
-
-let dataPath = Path.Join(__SOURCE_DIRECTORY__,"processed-data","*.csv")
-let data = mlContext.Data.LoadFromTextFile<ModelInput>(dataPath,separatorChar=',', allowQuoting=true, hasHeader=false)
-
-// Split into training and test sets
-
-let dataSplit = mlContext.Data.TrainTestSplit(data, samplingKeyColumnName="Camis")
-
-// Train model using AutoML
-let experimentTimeInSeconds = 300u
-let labelColumnName = "InspectionScore"
-let experimentResult = mlContext.Auto().CreateRegressionExperiment(experimentTimeInSeconds).Execute(dataSplit.TrainSet, labelColumnName)
-
-// Evaluate the model
-
-let bestModel = experimentResult.BestRun.Model
-
-let predictions = bestModel.Transform dataSplit.TestSet
-let metrics = mlContext.Regression.Evaluate(predictions,"InspectionScore","Score")
-
-metrics
-
-// Make predictions with the model
-
-let input = {
-    Camis="41720083"
-    Boro="Manhattan"
-    InspectionType="Cycle Inspection / Re-inspection"
-    InspectionScore=11.0f
-    Violations= "04H,09C,10F"
-    CriticalViolations=1.0f
-    TotalViolations=3.0f
-}
-
-let predictionEngine= mlContext.Model.CreatePredictionEngine<ModelInput,ModelOutput> bestModel
-
-let prediction = predictionEngine.Predict(input)
-
-prediction
-
-// Save the model
-mlContext.Model.Save(bestModel, data.Schema,"InspectionModel.zip")
+printfn "Finished preparing the model. Please stop `spark-debug.sh`."
