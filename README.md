@@ -27,7 +27,8 @@ Slides are in the [dotnetconf-fsharp-machine-learning.pdf](./dotnetconf-fsharp-m
   - **InspectionModel.zip** - Regression model to predict the score of a restaurant inspection
   - **Deploy.fsx** - Farmer deployment script.
 - **data-prep-modeling.dib** - .NET Interactive Notebook to explore & visualize data, and train a machine learning model
-- **data-prep-modeling.fsx** - F# Interactive script to explore & visualize data, and train a machine learning model (same code as *dib* notebook without interactive displays).
+- **data-prep-modeling.fsx** - F# Interactive script to explore & visualize data.(same data analysis code as *dib* notebook without interactive displays).
+- **data-prep-training.fsx** - F# Interactive script to train a machine learning model (same mdel training code as *dib* notebook without interactive displays).
 - **spark-debug.cmd** - Console script to start .NET for Apache Spark in Debug mode.
 
 ## About the data
