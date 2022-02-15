@@ -1,6 +1,6 @@
 # Getting Started with Data Analytics & Machine Learning in F#
 
-This repo contains code shown in [.NET Conf - Focus on F# - Getting Started with Data Analytics & Machine Learning in F# session](https://www.youtube.com/watch?v=i3qEhwcG7ps)
+This repo contains code shown in [.NET Conf - Focus on F# - Getting Started with Data Analytics & Machine Learning in F# session](https://www.youtube.com/watch?v=ciBtKRZMIaU)
 
 ## Scenario
 
